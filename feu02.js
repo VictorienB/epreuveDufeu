@@ -11,21 +11,15 @@ function readBoardFromFile(filename) {
         process.exit(1);
     }
 }
-
 function readShapeFromFile(filename) {
     try {
         const content = fs.readFileSync(filename, 'utf-8');
-        return content.split('\n').map(row => row.split('').map(char => {
-            console.log(`Code ASCII de '${char}': ${char.charCodeAt(0)}`);
-            return (char === 'X' || char === ' ') ? 'X' : char;
-        }));
+        return content.split('\n').map(row => row.trim().split(''));
     } catch (error) {
         console.error(`Erreur de lecture du fichier ${filename}: ${error.message}`);
         process.exit(1);
     }
 }
-
-
 
 function findShape(board, shape) {
     const rows = board.length;
@@ -94,3 +88,5 @@ console.log('----');
 
 // Rechercher la forme dans le plateau
 findShape(board, shape);
+
+// Suite a poursuivrer : au lieu de chercher comme ca, chercher chaque ligne dans le board et si on trouve les lignes dans le board, on regarde si les correspondance sont bien alignées.
