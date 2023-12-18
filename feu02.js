@@ -12,18 +12,21 @@ function readMatrixFromFile(filename) {
         process.exit(1);
     }
 }
-function cropMatrix(matrix) {
-    const numRows = matrix.length;
-    const numCols = matrix[0].length;
+function cropMatrix(matrix,newCols, newRows) {
+    const currentRows = matrix.length;
+    const currentCols = matrix[0].length;
 
-    // Redimensionner la matrice à 4x3 (n-1)
-    const croppedMatrix = [];
-    for (let i = 0; i < Math.min(numRows, 4); i++) {
-        const croppedRow = matrix[i].slice(0, Math.min(numCols, 3));
-        croppedMatrix.push(croppedRow);
+    if (newRows < currentRows || newCols < currentCols) {
+        // Retirer des lignes ou des colonnes
+        return matrix.slice(0, newRows).map(row => row.slice(0, newCols));
+    } else {
+        // Ajouter des lignes ou des colonnes remplies de zéros
+        const resizedMatrix = matrix.map(row => [...row, ...Array(newCols - currentCols).fill(0)]);
+        for (let i = currentRows; i < newRows; i++) {
+            resizedMatrix.push(Array(newCols).fill(0));
+        }
+        return resizedMatrix;
     }
-
-    return croppedMatrix;
 }
 function findShape(board, shape) {
     const rows = board.length;
@@ -42,7 +45,7 @@ function findShape(board, shape) {
 
                     console.log(`Comparaison : shape[${si}][${sj}] (${shapeCell}) === board[${i + si}][${j + sj}] (${boardCell})`);
 
-                    if (shapeCell !== boardCell) {
+                    if (shapeCell !== 10 && shapeCell !== boardCell) {
                         found = false;
                         break;
                     }
@@ -81,8 +84,8 @@ const originalBoard = readMatrixFromFile(boardFilename);
 const originalShape = readMatrixFromFile(shapeFilename);
 
 // Redimensionner les matrices à 4x3 
-const croppedBoard = cropMatrix(originalBoard);
-const croppedShape = cropMatrix(originalShape);
+const croppedBoard = cropMatrix(originalBoard,originalBoard[0].length-1, originalBoard.length);
+const croppedShape = cropMatrix(originalShape,originalShape[0].length-1, originalShape.length);
 
 // Afficher les matrices lues et redimensionnées
 console.log('Board :');
