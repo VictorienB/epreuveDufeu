@@ -11,6 +11,7 @@ function readBoardFromFile(filename) {
         process.exit(1);
     }
 }
+
 function readShapeFromFile(filename) {
     try {
         const content = fs.readFileSync(filename, 'utf-8');
@@ -35,11 +36,21 @@ function findShape(board, shape) {
                 for (let sj = 0; sj < shapeCols; sj++) {
                     const shapeChar = shape[si][sj];
                     const boardChar = board[i + si][j + sj];
-
+            
+                    // Ignore special characters and spaces
+                    if (shapeChar.trim() === '' || boardChar.trim() === '') {
+                        console.log(`Ignoré le caractère spécial ou espace`);
+                        continue;
+                    }
+            
                     console.log(`Comparaison : shape[${si}][${sj}] (${shapeChar}) === board[${i + si}][${j + sj}] (${boardChar})`);
-
-                    if (shapeChar !== boardChar && shapeChar !== 'X') {
+            
+                    // Update the comparison condition
+                    if (shapeChar !== ' ' && shapeChar !== String.fromCharCode(boardChar.charCodeAt(0))) {
                         found = false;
+                        console.log(`Pas trouvé à (${i + 1},${j + 1})`);
+                        console.log(`shapeChar: ${shapeChar}, boardChar: ${boardChar}`);
+                        console.log(`shapeChar ASCII: ${shapeChar.charCodeAt(0)}, boardChar ASCII: ${boardChar.charCodeAt(0)}`);
                         break;
                     }
                 }
@@ -60,9 +71,6 @@ function findShape(board, shape) {
 
     console.log('Introuvable');
 }
-
-
-
 
 // Récupérer les noms de fichiers à partir des arguments en ligne de commande
 const args = process.argv.slice(2);
@@ -88,5 +96,3 @@ console.log('----');
 
 // Rechercher la forme dans le plateau
 findShape(board, shape);
-
-// Suite a poursuivrer : au lieu de chercher comme ca, chercher chaque ligne dans le board et si on trouve les lignes dans le board, on regarde si les correspondance sont bien alignées.
