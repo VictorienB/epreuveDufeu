@@ -43,7 +43,7 @@ function findShape(board, shape) {
                     const shapeCell = shape[si][sj];
                     const boardCell = board[i + si][j + sj];
 
-                    console.log(`Comparaison : shape[${si}][${sj}] (${shapeCell}) === board[${i + si}][${j + sj}] (${boardCell})`);
+                    //console.log(`Comparaison : shape[${si}][${sj}] (${shapeCell}) === board[${i + si}][${j + sj}] (${boardCell})`);
 
                     if (shapeCell !== 10 && shapeCell !== boardCell) {
                         found = false;
