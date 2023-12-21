@@ -11,7 +11,7 @@ const density = parseInt(process.argv[4]);
 
 const filename = 'plateau.txt';
 
-fs.writeFileSync(filename, '');
+fs.writeFileSync(filename, `${y}.xo\n`);
 
 for (let i = 0; i <= y; i++) {
   let line = '';
