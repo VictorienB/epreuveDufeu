@@ -6,8 +6,8 @@ function readMap(filename) {
     const dimensions = lines[0].split('x').map(Number);
     const map = lines.slice(1, dimensions[0] + 1).map(line => line.split(''));
 
-    const start = findCoordinates(map, 'o');
-    const end = findCoordinates(map, '2');
+    const start = findCoordinates(map, '2');
+    const end = findCoordinates(map, '$');
 
     return {
         dimensions,
@@ -33,7 +33,7 @@ function isValidMove(map, row, col) {
 }
 
 function findShortestPath(map, start, end) {
-    const queue = [[...start, 0]]; // [row, col, steps]
+    const queue = [[start[0], start[1], 0]]; // [row, col, steps]
     const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]; // Up, Right, Down, Left
 
     while (queue.length > 0) {
@@ -72,5 +72,5 @@ function solveMaze(filename) {
 }
 
 // Example usage
-const filename = 'example.map';
+const filename = 'maze.txt';
 solveMaze(filename);
