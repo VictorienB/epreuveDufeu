@@ -33,14 +33,14 @@ function isValidMove(map, row, col) {
 }
 
 function findShortestPath(map, start, end) {
-    const queue = [[start[0], start[1], 0]]; // [row, col, steps]
+    const queue = [[start[0], start[1], []]]; // [row, col, path]
     const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]; // Up, Right, Down, Left
 
     while (queue.length > 0) {
-        const [row, col, steps] = queue.shift();
+        const [row, col, path] = queue.shift();
 
         if (row === end[0] && col === end[1]) {
-            return steps;
+            return path;
         }
 
         for (const [dx, dy] of directions) {
@@ -48,27 +48,28 @@ function findShortestPath(map, start, end) {
             const newCol = col + dy;
 
             if (isValidMove(map, newRow, newCol)) {
-                queue.push([newRow, newCol, steps + 1]);
-                map[newRow][newCol] = 'o'; // Mark the cell as visited
+                queue.push([newRow, newCol, [...path, [newRow, newCol]]]);
+                map[newRow][newCol] = ' '; // Mark the cell as visited
             }
         }
     }
 
-    return -1; // No path found
+    return null; // No path found
 }
 
 function solveMaze(filename) {
     const { dimensions, map, start, end } = readMap(filename);
-    const steps = findShortestPath(map, start, end);
+    const path = findShortestPath(map, start, end);
 
-    if (steps !== -1) {
-        console.log(`=> SORTIE ATTEINTE EN ${steps} COUPS !`);
+    if (path) {
+        console.log(`=> SORTIE ATTEINTE EN ${path.length} COUPS !`);
+        // Print the solved maze with only the path
+        console.log(map.map((row, rowIndex) =>
+            row.map((cell, colIndex) => path.some(([r, c]) => r === rowIndex && c === colIndex) ? 'o' : cell).join('')
+        ).join('\n'));
     } else {
         console.log('=> AUCUN CHEMIN POSSIBLE !');
     }
-
-    // Print the solved maze
-    console.log(map.map(row => row.join('')).join('\n'));
 }
 
 // Example usage
